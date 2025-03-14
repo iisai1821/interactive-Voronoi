@@ -3,7 +3,7 @@
  * @param colors - An array of hex color strings (e.g., ["#FF5733", "#33FF57", "#3357FF"]).
  * @returns A hex string representing the averaged color.
  */
-export default function averageHexColors(colors: string[]): string {
+export function averageHexColors(colors: string[]): string {
   if (colors.length === 0) return "#000000"; // Default to black if no colors provided
 
   let totalR = 0, totalG = 0, totalB = 0;
@@ -58,4 +58,26 @@ export function hexToRgb(hex: string): { r: number; g: number; b: number } | nul
  */
 export function rgbToHex(r: number, g: number, b: number): string {
   return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`;
+}
+
+/**
+ * Compares two colors and returns true if they are similar.
+ * @param color1 - First color in hex format (e.g., "#FF5733"). 
+ * @param color2 - Second color in hex format (e.g., "#33FF57").
+ * @param threshold - Similarity threshold (0-255). Default is 50.  
+ * @returns True if colors are similar, false otherwise.
+ */
+export function colorsAreSimilar(color1: string, color2: string, threshold: number = 50): boolean {
+  const rgb1 = hexToRgb(color1);
+  const rgb2 = hexToRgb(color2);
+
+  if (!rgb1 || !rgb2) return false; // Invalid colors
+
+  const distance = Math.sqrt(
+    Math.pow(rgb1.r - rgb2.r, 2) +
+    Math.pow(rgb1.g - rgb2.g, 2) +
+    Math.pow(rgb1.b - rgb2.b, 2)
+  );
+
+  return distance < threshold;
 }
